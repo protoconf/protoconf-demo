@@ -1,0 +1,20 @@
+on:
+  push:
+    branches:
+      - master
+
+name: Protoconf insert to production
+jobs:
+  checks:
+    name: production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: insert changes
+        uses: protoconf/protoconf-actions@master
+        with:
+          store_type: consul
+          store_address: ${{secrets.CONSUL_ADDR}}
+          prefix: production
+          before_commit: ${{ github.event.before }}
+          after_commit: ${{ github.event.after }}
